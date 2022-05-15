@@ -1,7 +1,8 @@
 import React from 'react'
 import coverImage from "../../assets/cover/cover-image.jpg";
 
-function About() {
+const About = () => {
+// export default function About() {
 
   return (
     <section className="my-5" >
