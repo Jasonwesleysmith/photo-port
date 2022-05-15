@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { validateEmail } from "../../utils/helpers";
 
 function ContactForm() {
   // const { name, email, message } = formState;
+  const [errorMessage, setErrorMessage] = useState("");
   const [formState, setFormState] = useState({
     name: "",
     email: "",
@@ -10,7 +12,20 @@ function ContactForm() {
   const { name, email, message } = formState;
 
   function handleChange(e) {
-    setFormState({ ...formState, name: e.target.value });
+    if (e.target.name === "email") {
+      const isValid = validateEmail(e.target.value);
+      console.log(isValid);
+      // isValid conditional statement
+      if (!isValid) {
+        setErrorMessage("Your email is invalid.");
+      } else {
+        setErrorMessage("");
+      }
+    }
+
+    if (!errorMessage) {
+      setFormState({ ...formState, [e.target.name]: e.target.value });
+    }
   }
 
   function handleSubmit(e) {
@@ -27,7 +42,7 @@ function ContactForm() {
           <input
             type="text"
             defaultValue={name}
-            onChange={handleChange}
+            onBlur={handleChange}
             name="name"
           />
         </div>
@@ -37,7 +52,7 @@ function ContactForm() {
             type="email"
             defaultValue={email}
             name="email"
-            onChange={handleChange}
+            onBlur={handleChange}
           />
         </div>
         <div>
@@ -45,10 +60,15 @@ function ContactForm() {
           <textarea
             name="message"
             defaultValue={message}
-            onChange={handleChange}
+            onBlur={handleChange}
             rows="5"
           />
         </div>
+        {errorMessage && (
+          <div>
+            <p className="error-text">{"Your email isn't valid."}</p>
+          </div>
+        )}
         <button type="submit">Submit</button>
       </form>
     </section>
